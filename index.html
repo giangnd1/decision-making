@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 Khái Niệm Decision Making Nền Tảng</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#F7F8FC;color:#1a1a2e;line-height:1.6}
+
+.app{max-width:1280px;margin:0 auto;padding:2rem 1.5rem}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#1e3a5f 0%,#2d6a9f 60%,#3b82c4 100%);border-radius:20px;padding:2rem 2.5rem;margin-bottom:1.75rem;color:#fff;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-40px;right:-40px;width:220px;height:220px;background:rgba(255,255,255,0.05);border-radius:50%}
+.hero::after{content:'';position:absolute;bottom:-60px;right:80px;width:150px;height:150px;background:rgba(255,255,255,0.04);border-radius:50%}
+.hero-eyebrow{font-size:11px;font-weight:600;letter-spacing:2.5px;text-transform:uppercase;opacity:0.65;margin-bottom:10px}
+.hero h1{font-size:28px;font-weight:700;line-height:1.25;margin-bottom:8px;position:relative}
+.hero h1 em{font-style:normal;opacity:0.7;font-weight:400}
+.hero p{font-size:14px;opacity:0.75;max-width:600px;line-height:1.65;position:relative}
+.hero-stats{display:flex;gap:2rem;margin-top:1.5rem;position:relative}
+.hero-stat-n{font-size:26px;font-weight:700;line-height:1}
+.hero-stat-l{font-size:11px;opacity:0.6;margin-top:3px;letter-spacing:0.3px}
+
+/* Progress */
+.progress-bar{height:4px;background:#E5E7EB;border-radius:2px;margin-bottom:1.5rem;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#2563EB,#0EA5E9);border-radius:2px;transition:width 0.6s ease}
+
+/* Controls */
+.controls-row{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+.search-wrap{flex:1;min-width:240px;position:relative}
+.search-wrap input{width:100%;padding:10px 14px 10px 40px;border:1.5px solid #E5E7EB;border-radius:12px;background:#fff;color:#1a1a2e;font-size:14px;outline:none;transition:all 0.15s;box-shadow:0 1px 3px rgba(0,0,0,0.04)}
+.search-wrap input:focus{border-color:#2563EB;box-shadow:0 0 0 3px rgba(37,99,235,0.1)}
+.search-icon{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:#9CA3AF;pointer-events:none}
+.view-toggle{display:flex;border:1.5px solid #E5E7EB;border-radius:10px;overflow:hidden;background:#fff}
+.view-btn{padding:8px 14px;font-size:13px;cursor:pointer;border:none;background:none;color:#6B7280;transition:all 0.15s;font-weight:500}
+.view-btn.active{background:#1e3a5f;color:#fff}
+
+/* Tabs */
+.tabs-wrap{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem;align-items:center}
+.tab-label{font-size:11px;color:#9CA3AF;font-weight:600;letter-spacing:0.8px;text-transform:uppercase;margin-right:4px;white-space:nowrap}
+.tab{padding:5px 13px;font-size:12px;border:1.5px solid #E5E7EB;border-radius:20px;cursor:pointer;background:#fff;color:#6B7280;transition:all 0.15s;white-space:nowrap;font-weight:500}
+.tab:hover{border-color:#93C5FD;color:#1D4ED8}
+.tab.active{background:#1e3a5f;border-color:#1e3a5f;color:#fff;box-shadow:0 2px 8px rgba(30,58,95,0.25)}
+
+/* Grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+.grid.list-view{grid-template-columns:1fr}
+
+.card{background:#fff;border:1.5px solid #E5E7EB;border-radius:14px;padding:15px;cursor:pointer;transition:all 0.18s;position:relative}
+.card:hover{border-color:#93C5FD;transform:translateY(-2px);box-shadow:0 6px 20px rgba(37,99,235,0.09)}
+.card.viewed{border-left:3px solid #0EA5E9}
+.viewed-mark{position:absolute;top:9px;right:11px;font-size:11px;color:#0EA5E9;font-weight:700}
+
+.grid.list-view .card{display:grid;grid-template-columns:120px 1fr;gap:14px;align-items:start}
+.grid.list-view .card-left{display:flex;flex-direction:column;gap:5px}
+
+.card-num{font-size:10px;font-weight:700;color:#9CA3AF;background:#F9FAFB;border-radius:6px;padding:2px 6px;display:inline-block;margin-bottom:5px;letter-spacing:0.5px;border:1px solid #F3F4F6}
+.cat-badge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:8px;margin-bottom:7px;font-weight:600;border:1px solid transparent;line-height:1.4}
+.card-title{font-size:13px;font-weight:600;color:#1a1a2e;margin-bottom:2px;line-height:1.4}
+.card-en{font-size:11px;color:#9CA3AF;margin-bottom:5px;font-style:italic}
+.card-hook{font-size:12px;color:#6B7280;line-height:1.5}
+.card-tags{display:flex;gap:4px;flex-wrap:wrap;margin-top:7px}
+.tag{font-size:10px;background:#EFF6FF;color:#3B82F6;padding:2px 7px;border-radius:6px;border:1px solid #DBEAFE}
+
+.grid.list-view .card-num{margin-bottom:0}
+.grid.list-view .cat-badge{margin-bottom:0}
+.grid.list-view .card-title{font-size:14px}
+
+.no-result{text-align:center;padding:4rem;color:#9CA3AF;font-size:14px}
+
+/* Modal */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(10,15,40,0.6);z-index:1000;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(8px)}
+.modal-bg.open{display:flex}
+.modal{background:#fff;border-radius:20px;width:100%;max-width:660px;max-height:88vh;overflow-y:auto;box-shadow:0 30px 90px rgba(0,0,0,0.22);border:1px solid #E5E7EB}
+
+.modal-top{padding:1.75rem 1.75rem 0}
+.modal-header{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:.75rem}
+.modal-badges{display:flex;align-items:center;gap:8px;margin-bottom:8px;flex-wrap:wrap}
+.modal-num{font-size:11px;font-weight:700;color:#6B7280;background:#F3F4F6;border-radius:6px;padding:2px 8px;border:1px solid #E5E7EB}
+.modal-cat{display:inline-block;font-size:11px;padding:2px 10px;border-radius:8px;font-weight:600}
+.modal-title{font-size:22px;font-weight:700;color:#1a1a2e;line-height:1.3}
+.modal-en{font-size:13px;color:#9CA3AF;margin-top:4px;font-style:italic}
+.close-btn{background:#F3F4F6;border:none;width:34px;height:34px;border-radius:10px;cursor:pointer;color:#6B7280;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all 0.15s}
+.close-btn:hover{background:#E5E7EB;color:#1a1a2e}
+
+.modal-divider{height:1px;background:#F3F4F6;margin:0 1.75rem .25rem}
+.modal-body{padding:.75rem 1.75rem 1.75rem;font-size:14px;color:#374151;line-height:1.8}
+.modal-body h3{font-size:10px;font-weight:700;margin:1rem 0 5px;color:#2563EB;text-transform:uppercase;letter-spacing:1.2px;display:flex;align-items:center;gap:6px}
+.modal-body h3::after{content:'';flex:1;height:1px;background:#EFF6FF}
+.modal-body p{margin-bottom:10px}
+.modal-body strong{color:#111827;font-weight:600}
+
+.example-box{background:linear-gradient(135deg,#F0F9FF,#E0F2FE);border-radius:12px;padding:14px 16px;margin:10px 0;border-left:3px solid #0EA5E9}
+.example-box .ex-label{font-size:10px;font-weight:700;color:#0369A1;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px}
+.example-box p{margin:0;font-size:13px;color:#0C4A6E;line-height:1.65}
+
+.model-box{background:#FAFAF5;border-radius:10px;padding:12px 14px;margin:8px 0;border:1px solid #E7E5D0}
+.model-box .ml-label{font-size:10px;font-weight:700;color:#92400E;letter-spacing:1px;text-transform:uppercase;margin-bottom:5px}
+.model-box p{margin:0;font-size:13px;color:#451A03;line-height:1.6}
+
+.trap-box{background:#FFF7F7;border-radius:10px;padding:12px 14px;margin:8px 0;border:1px solid #FECACA}
+.trap-box p{margin:0;font-size:13px;color:#7F1D1D;line-height:1.6}
+
+.loading-area{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:3.5rem 0;gap:14px}
+.dots{display:flex;gap:7px}
+.dot{width:9px;height:9px;border-radius:50%;background:#2563EB;animation:pulse 1s infinite}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+.loading-txt{font-size:13px;color:#9CA3AF}
+@keyframes pulse{0%,80%,100%{transform:scale(0.7);opacity:0.4}40%{transform:scale(1);opacity:1}}
+
+.modal-footer{padding:1rem 1.75rem 1.25rem;border-top:1px solid #F3F4F6;display:flex;gap:8px}
+.btn-nav{padding:9px 16px;border:1.5px solid #E5E7EB;border-radius:10px;background:#fff;color:#6B7280;font-size:13px;cursor:pointer;transition:all 0.15s;font-weight:500}
+.btn-nav:hover{border-color:#93C5FD;color:#1D4ED8}
+.btn-copy{flex:1;padding:9px 14px;border:none;border-radius:10px;background:linear-gradient(135deg,#1e3a5f,#2563EB);color:#fff;font-size:13px;cursor:pointer;font-weight:600;transition:all 0.15s;display:none}
+.btn-copy.visible{display:block}
+.btn-copy:hover{opacity:0.9}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="hero">
+  <div class="hero-eyebrow">⚖️ Khoa Học Ra Quyết Định</div>
+  <h1>100 Khái Niệm <em>Decision Making</em> Nền Tảng</h1>
+  <p>Tổng hợp tinh tuý từ Behavioral Economics, Cognitive Science, Game Theory, Probability, Philosophy — tích hợp Mental Models theo latticework của Charlie Munger thành bộ công cụ ra quyết định hoàn chỉnh.</p>
+  <div class="hero-stats">
+    <div class="hero-stat"><div class="hero-stat-n" id="s-show">100</div><div class="hero-stat-l">Đang hiển thị</div></div>
+    <div class="hero-stat"><div class="hero-stat-n">9</div><div class="hero-stat-l">Danh mục</div></div>
+    <div class="hero-stat"><div class="hero-stat-n" id="s-view">0</div><div class="hero-stat-l">Đã khám phá</div></div>
+    <div class="hero-stat"><div class="hero-stat-n" id="s-pct">0%</div><div class="hero-stat-l">Tiến độ</div></div>
+  </div>
+</div>
+
+<div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+
+<div class="controls-row">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="search" placeholder="Tìm khái niệm, tên tiếng Anh, tag..." oninput="filter()">
+  </div>
+  <div class="view-toggle">
+    <button class="view-btn active" onclick="setView('grid',this)">⊞ Lưới</button>
+    <button class="view-btn" onclick="setView('list',this)">≡ Danh sách</button>
+  </div>
+</div>
+
+<div class="tabs-wrap"><span class="tab-label">Danh mục:</span><div id="tabs"></div></div>
+<div class="grid" id="grid"></div>
+<div class="no-result" id="nr" style="display:none">Không tìm thấy khái niệm phù hợp.</div>
+</div>
+
+<div class="modal-bg" id="mbg" onclick="closeM(event)">
+<div class="modal">
+  <div class="modal-top">
+    <div class="modal-header">
+      <div style="flex:1">
+        <div class="modal-badges"><span class="modal-num" id="m-num"></span><span class="modal-cat" id="m-cat"></span></div>
+        <div class="modal-title" id="m-title"></div>
+        <div class="modal-en" id="m-en"></div>
+      </div>
+      <button class="close-btn" onclick="closeM()">✕</button>
+    </div>
+  </div>
+  <div class="modal-divider"></div>
+  <div class="modal-body" id="m-body"><div class="loading-area"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div class="loading-txt">AI đang tổng hợp nội dung...</div></div></div>
+  <div class="modal-footer">
+    <button class="btn-nav" onclick="nav(-1)">← Trước</button>
+    <button class="btn-copy visible" id="btn-copy" onclick="copyQ()">📋 Copy câu hỏi để hỏi sâu hơn</button>
+    <button class="btn-nav" onclick="nav(1)">Tiếp →</button>
+  </div>
+</div>
+</div>
+
+<script>
+const CATS = {
+  "Nền tảng nhận thức":     {bg:"#EFF6FF",tc:"#1E40AF",bc:"#BFDBFE"},
+  "Thiên kiến & Bẫy tư duy":{bg:"#FFF7ED",tc:"#92400E",bc:"#FDE68A"},
+  "Khung xác suất":         {bg:"#F5F3FF",tc:"#4C1D95",bc:"#DDD6FE"},
+  "Lý thuyết triển vọng":   {bg:"#FDF2F8",tc:"#831843",bc:"#FBCFE8"},
+  "Mô hình quyết định":     {bg:"#ECFDF5",tc:"#065F46",bc:"#A7F3D0"},
+  "Lý thuyết trò chơi":     {bg:"#F0F9FF",tc:"#0C4A6E",bc:"#BAE6FD"},
+  "Tư duy chiến lược":      {bg:"#FFF1F2",tc:"#881337",bc:"#FECDD3"},
+  "Quyết định dưới bất định":{bg:"#FFFBEB",tc:"#78350F",bc:"#FCD34D"},
+  "Học hỏi từ quyết định":  {bg:"#F0FDF4",tc:"#14532D",bc:"#86EFAC"},
+};
+
+const DATA = [
+// ── Nền tảng nhận thức (1–12) ──
+{n:1,c:"Nền tảng nhận thức",vi:"Hệ thống 1 & Hệ thống 2",en:"System 1 & System 2",hook:"Tư duy nhanh-trực giác vs tư duy chậm-phân tích — mỗi hệ phù hợp với loại quyết định khác nhau",tags:["Kahneman","Dual Process"]},
+{n:2,c:"Nền tảng nhận thức",vi:"Tải nhận thức",en:"Cognitive Load",hook:"Não có giới hạn xử lý — quyết định quan trọng cần môi trường tối giản",tags:["Working Memory","Cognitive"]},
+{n:3,c:"Nền tảng nhận thức",vi:"Suy giảm ý chí",en:"Ego Depletion",hook:"Tự kiểm soát là tài nguyên hữu hạn — đưa quyết định khó vào buổi sáng",tags:["Willpower","Energy"]},
+{n:4,c:"Nền tảng nhận thức",vi:"Mô hình tinh thần",en:"Mental Models",hook:"Bộ lọc nhận thức về thực tế — mô hình cũ kỹ tạo ra quyết định sai",tags:["Munger","Latticework"]},
+{n:5,c:"Nền tảng nhận thức",vi:"Metacognition — Tư duy về tư duy",en:"Metacognition",hook:"Ý thức về quá trình ra quyết định của chính mình — nền tảng cải thiện mọi quyết định",tags:["Self-awareness","Reflection"]},
+{n:6,c:"Nền tảng nhận thức",vi:"Giới hạn duy lý",en:"Bounded Rationality",hook:"Con người không thể tối ưu — ta tìm giải pháp đủ tốt (satisficing), không phải tối ưu tuyệt đối",tags:["Simon","Satisficing"]},
+{n:7,c:"Nền tảng nhận thức",vi:"Heuristics — Lối tắt tư duy",en:"Heuristics",hook:"Quy tắc ngón tay cái giúp quyết định nhanh — hữu ích nhưng dễ gây ra thiên kiến",tags:["Kahneman","Fast Thinking"]},
+{n:8,c:"Nền tảng nhận thức",vi:"Khung tham chiếu",en:"Reference Frame",hook:"Mọi đánh giá đều tương đối — thay đổi điểm tham chiếu thay đổi quyết định",tags:["Framing","Relativity"]},
+{n:9,c:"Nền tảng nhận thức",vi:"Ưu tiên nhận thức (Salience)",en:"Salience Bias",hook:"Ta chú ý và phóng đại những gì dễ thấy nhất — thông tin nổi bật chi phối quyết định",tags:["Attention","Availability"]},
+{n:10,c:"Nền tảng nhận thức",vi:"Trí nhớ & Quyết định",en:"Memory & Decision",hook:"Ta không nhớ trải nghiệm — ta nhớ đỉnh điểm và kết thúc (Peak-End Rule)",tags:["Kahneman","Memory"]},
+{n:11,c:"Nền tảng nhận thức",vi:"Cảm xúc trong ra quyết định",en:"Emotional Influence",hook:"Cảm xúc không phải nhiễu loạn — chúng mang thông tin; bỏ qua chúng là sai lầm",tags:["Damasio","Somatic Marker"]},
+{n:12,c:"Nền tảng nhận thức",vi:"Đa dạng quan điểm",en:"Perspective Diversity",hook:"Nhóm đồng nhất quyết định tệ hơn nhóm đa dạng — góc nhìn khác nhau bù đắp điểm mù nhau",tags:["Groupthink","Diversity"]},
+
+// ── Thiên kiến & Bẫy tư duy (13–28) ──
+{n:13,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến xác nhận",en:"Confirmation Bias",hook:"Ta tìm kiếm, diễn giải, ghi nhớ thông tin theo hướng xác nhận điều đã tin sẵn",tags:["Bias","Epistemics"]},
+{n:14,c:"Thiên kiến & Bẫy tư duy",vi:"Hiệu ứng neo",en:"Anchoring Bias",hook:"Số đầu tiên tiếp xúc neo mọi ước tính sau — đặt neo chủ động trước khi đàm phán",tags:["Negotiation","First Number"]},
+{n:15,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến hiện trạng",en:"Status Quo Bias",hook:"Mặc định giữ nguyên vì thay đổi cảm thấy như rủi ro — dù bất hành động cũng là quyết định",tags:["Inertia","Default"]},
+{n:16,c:"Thiên kiến & Bẫy tư duy",vi:"Ngụy biện chi phí chìm",en:"Sunk Cost Fallacy",hook:"Tiếp tục vì đã đầu tư quá nhiều — thay vì đánh giá triển vọng tương lai",tags:["Economics","Escalation"]},
+{n:17,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến lạc quan",en:"Optimism Bias",hook:"Hầu hết mọi người tin mình sẽ gặp may hơn người khác — dẫn đến kế hoạch thiếu thực tế",tags:["Planning Fallacy","Risk"]},
+{n:18,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến hậu kiến",en:"Hindsight Bias",hook:"Sau khi biết kết quả, ta tin mình đã biết trước — ngăn cản học hỏi thật sự từ thất bại",tags:["Outcome Bias","Learning"]},
+{n:19,c:"Thiên kiến & Bẫy tư duy",vi:"Hiệu ứng hào quang",en:"Halo Effect",hook:"Ấn tượng tốt về một điểm làm ta đánh giá cao mọi điểm khác — phổ biến trong tuyển dụng",tags:["Perception","Attribution"]},
+{n:20,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến tự phục vụ",en:"Self-Serving Bias",hook:"Thành công là do ta, thất bại là do hoàn cảnh — bóp méo nhận thức về năng lực thực sự",tags:["Attribution","Ego"]},
+{n:21,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến khả dụng",en:"Availability Heuristic",hook:"Đánh giá xác suất dựa vào dễ nhớ — tai nạn máy bay ít hơn tai nạn xe nhưng nghe sợ hơn",tags:["Probability","Memory"]},
+{n:22,c:"Thiên kiến & Bẫy tư duy",vi:"Ngụy biện tỷ lệ nền",en:"Base Rate Neglect",hook:"Bỏ qua thống kê chung khi có câu chuyện cụ thể sinh động hơn",tags:["Bayes","Statistics"]},
+{n:23,c:"Thiên kiến & Bẫy tư duy",vi:"Thiên kiến hiện tại",en:"Present Bias",hook:"Thưởng ngay bây giờ hấp dẫn hơn phần thưởng lớn hơn trong tương lai — gốc rễ của trì hoãn",tags:["Hyperbolic Discounting","Time"]},
+{n:24,c:"Thiên kiến & Bẫy tư duy",vi:"Hiệu ứng Dunning-Kruger",en:"Dunning-Kruger Effect",hook:"Người kém không biết mình kém; người giỏi lại đánh giá thấp mình — khác nhau hoàn toàn",tags:["Metacognition","Competence"]},
+{n:25,c:"Thiên kiến & Bẫy tư duy",vi:"Tư duy nhóm",en:"Groupthink",hook:"Áp lực đồng thuận dập tắt phản biện — quyết định tập thể tệ hơn quyết định cá nhân tốt",tags:["Social","Conformity"]},
+{n:26,c:"Thiên kiến & Bẫy tư duy",vi:"Hiệu ứng tiếp xúc đơn thuần",en:"Mere Exposure Effect",hook:"Ta thích những gì quen thuộc — sự quen thuộc tạo ảo giác chất lượng",tags:["Familiarity","Marketing"]},
+{n:27,c:"Thiên kiến & Bẫy tư duy",vi:"Lỗi quy thuộc cơ bản",en:"Fundamental Attribution Error",hook:"Đổ lỗi tính cách khi người khác thất bại, đổ lỗi hoàn cảnh khi mình thất bại",tags:["Attribution","Psychology"]},
+{n:28,c:"Thiên kiến & Bẫy tư duy",vi:"Bẫy leo thang cam kết",en:"Escalation of Commitment",hook:"Càng thua càng cược thêm để gỡ — bẫy kinh điển trong dự án, quan hệ, và đầu tư",tags:["Sunk Cost","Gambling"]},
+
+// ── Khung xác suất (29–40) ──
+{n:29,c:"Khung xác suất",vi:"Tư duy Bayes",en:"Bayesian Thinking",hook:"Cập nhật niềm tin một cách có hệ thống khi có thông tin mới — xác suất là trạng thái niềm tin, không phải tần suất",tags:["Bayes","Epistemics"]},
+{n:30,c:"Khung xác suất",vi:"Kỳ vọng kỳ vọng (EV)",en:"Expected Value",hook:"EV = Σ(xác suất × kết quả) — nền tảng mọi quyết định hợp lý dưới bất định",tags:["Probability","Decision"]},
+{n:31,c:"Khung xác suất",vi:"Phân phối xác suất",en:"Probability Distributions",hook:"Không có kết quả duy nhất — hãy nghĩ theo phân phối khả năng từ tệ nhất đến tốt nhất",tags:["Statistics","Uncertainty"]},
+{n:32,c:"Khung xác suất",vi:"Quy luật số lớn",en:"Law of Large Numbers",hook:"Một lần thua không có nghĩa quyết định sai — đánh giá trên nhiều lần thực hiện",tags:["Statistics","Process"]},
+{n:33,c:"Khung xác suất",vi:"Hồi quy về trung bình",en:"Regression to the Mean",hook:"Kết quả cực đoan có xu hướng trở về trung bình — đừng rút kết luận vội vàng từ ngoại lệ",tags:["Statistics","Galton"]},
+{n:34,c:"Khung xác suất",vi:"Đuôi béo & Sự kiện cực đoan",en:"Fat Tails & Tail Risk",hook:"Thế giới thực có nhiều sự kiện cực đoan hơn phân phối chuẩn dự đoán — Taleb",tags:["Taleb","Black Swan"]},
+{n:35,c:"Khung xác suất",vi:"Ngụy biện người cờ bạc",en:"Gambler's Fallacy",hook:"Sau 10 lần đỏ, đen KHÔNG có khả năng cao hơn — các sự kiện độc lập không nhớ lịch sử",tags:["Probability","Independence"]},
+{n:36,c:"Khung xác suất",vi:"Hiệu ứng Tỷ lệ nền Bayes",en:"Base Rate Integration",hook:"Luôn hỏi: trong lịch sử, tỷ lệ thành công của tình huống tương tự là bao nhiêu?",tags:["Bayes","Reference Class"]},
+{n:37,c:"Khung xác suất",vi:"Bẫy xác nhận xác suất",en:"Probability Calibration",hook:"Khi bạn nói '90% chắc', bạn có đúng 90% lần không? — hiệu chỉnh xác suất là kỹ năng học được",tags:["Calibration","Superforecasting"]},
+{n:38,c:"Khung xác suất",vi:"Sai lầm kết hợp",en:"Conjunction Fallacy",hook:"Xác suất hai sự kiện cùng xảy ra không bao giờ cao hơn xác suất từng sự kiện riêng lẻ",tags:["Tversky","Logic"]},
+{n:39,c:"Khung xác suất",vi:"Tư duy tần suất",en:"Frequency Thinking",hook:"Chuyển xác suất sang tần suất cụ thể để tránh bẫy nhận thức — '1 trong 100' dễ hiểu hơn '1%'",tags:["Probability","Communication"]},
+{n:40,c:"Khung xác suất",vi:"Phương sai & Độ lệch chuẩn",en:"Variance & Standard Deviation",hook:"Kỳ vọng giống nhau nhưng phương sai khác nhau tạo ra rủi ro hoàn toàn khác nhau",tags:["Risk","Statistics"]},
+
+// ── Lý thuyết triển vọng (41–50) ──
+{n:41,c:"Lý thuyết triển vọng",vi:"Lý thuyết triển vọng",en:"Prospect Theory",hook:"Con người đánh giá kết quả tương đối với điểm tham chiếu, không phải giá trị tuyệt đối — Kahneman & Tversky",tags:["Kahneman","Nobel"]},
+{n:42,c:"Lý thuyết triển vọng",vi:"Ác cảm với mất mát",en:"Loss Aversion",hook:"Nỗi đau mất 100$ mạnh hơn niềm vui được 100$ — dẫn đến quá thận trọng và giữ tài sản thua lỗ",tags:["Prospect Theory","Emotion"]},
+{n:43,c:"Lý thuyết triển vọng",vi:"Điểm tham chiếu",en:"Reference Point",hook:"Mọi đánh giá so sánh với điểm tham chiếu — ai đặt điểm tham chiếu, người đó kiểm soát nhận thức",tags:["Anchoring","Framing"]},
+{n:44,c:"Lý thuyết triển vọng",vi:"Hiệu ứng định hình (Framing)",en:"Framing Effect",hook:"'Tỷ lệ sống sót 90%' vs '10% tử vong' — cùng thông tin, cách đóng khung khác nhau → quyết định khác nhau",tags:["Communication","Bias"]},
+{n:45,c:"Lý thuyết triển vọng",vi:"Hàm giá trị lõm-lồi",en:"Value Function (Concave-Convex)",hook:"Với lợi nhuận: thêm ít vui hơn trước (lõm). Với thua lỗ: thêm ít đau hơn trước (lồi) — nghĩa là ta chấp nhận rủi ro cao để tránh lỗ",tags:["Diminishing Sensitivity","Risk"]},
+{n:46,c:"Lý thuyết triển vọng",vi:"Hệ số trọng lượng xác suất",en:"Probability Weighting",hook:"Ta phóng đại xác suất nhỏ (mua vé số, lo khủng bố) và thu nhỏ xác suất trung bình",tags:["Probability","Bias"]},
+{n:47,c:"Lý thuyết triển vọng",vi:"Hiệu ứng chắc chắn",en:"Certainty Effect",hook:"Chúng ta ưu tiên kết quả chắc chắn 100% quá mức so với xác suất 95% dù kỳ vọng thấp hơn",tags:["Allais Paradox","Risk"]},
+{n:48,c:"Lý thuyết triển vọng",vi:"Hiệu ứng sở hữu",en:"Endowment Effect",hook:"Thứ ta đang có có vẻ giá trị hơn thứ ta sắp có — khó bán đi thứ đã sở hữu",tags:["Ownership","Loss Aversion"]},
+{n:49,c:"Lý thuyết triển vọng",vi:"Chiết khấu phi tuyến theo thời gian",en:"Hyperbolic Discounting",hook:"1 triệu hôm nay >> 1.1 triệu tuần sau; nhưng 1 triệu sau 52 tuần ≈ 1.1 triệu sau 53 tuần — phi nhất quán thời gian",tags:["Present Bias","Time"]},
+{n:50,c:"Lý thuyết triển vọng",vi:"Hối tiếc & Phòng ngừa hối tiếc",en:"Regret & Regret Aversion",hook:"Nỗi hối tiếc hành động > hối tiếc bất hành động — nhưng dài hạn thì ngược lại",tags:["Emotion","Action vs Inaction"]},
+
+// ── Mô hình quyết định (51–63) ──
+{n:51,c:"Mô hình quyết định",vi:"Cây quyết định",en:"Decision Tree",hook:"Trực quan hóa mọi nhánh lựa chọn và hậu quả xác suất — tính kỳ vọng mỗi đường đi",tags:["Probability","Structure"]},
+{n:52,c:"Mô hình quyết định",vi:"Ma trận quyết định (MCDA)",en:"Multi-Criteria Decision Analysis",hook:"Đánh giá nhiều lựa chọn theo nhiều tiêu chí có trọng số — tránh tối ưu hóa một chiều",tags:["Optimization","Trade-off"]},
+{n:53,c:"Mô hình quyết định",vi:"Phân tích kịch bản",en:"Scenario Analysis",hook:"Xây 3 kịch bản (tệ nhất / trung bình / tốt nhất) để chuẩn bị cho phạm vi kết quả thực tế",tags:["Uncertainty","Planning"]},
+{n:54,c:"Mô hình quyết định",vi:"Premortem Analysis",en:"Premortem",hook:"Giả sử dự án đã thất bại — ngược dòng tìm nguyên nhân để phòng ngừa trước khi bắt đầu",tags:["Planning","Klein"]},
+{n:55,c:"Mô hình quyết định",vi:"Thuận nghịch & Không thuận nghịch",en:"Reversible vs Irreversible",hook:"Quyết định thuận nghịch: hành động nhanh, sai thì sửa. Không thuận nghịch: chậm và cẩn thận",tags:["Bezos","Type 1 Type 2"]},
+{n:56,c:"Mô hình quyết định",vi:"Ma trận Eisenhower",en:"Eisenhower Matrix",hook:"Quan trọng × Khẩn cấp → 4 ô hành động: làm ngay, lên kế hoạch, ủy thác, bỏ",tags:["Priority","Time Management"]},
+{n:57,c:"Mô hình quyết định",vi:"Tối thiểu hóa hối tiếc",en:"Regret Minimization Framework",hook:"'Ở tuổi 80 nhìn lại, tôi sẽ hối tiếc hơn nếu thử hay không thử?' — Jeff Bezos",tags:["Long-term","Bezos"]},
+{n:58,c:"Mô hình quyết định",vi:"Phân tích Chi phí — Lợi ích",en:"Cost-Benefit Analysis",hook:"So sánh có hệ thống mọi chi phí và lợi ích, kể cả chi phí cơ hội vô hình",tags:["Economics","Trade-off"]},
+{n:59,c:"Mô hình quyết định",vi:"Tư duy đa mô hình",en:"Multi-Model Thinking",hook:"Dùng nhiều mental models cùng lúc — mỗi mô hình soi sáng một góc khuất khác nhau",tags:["Munger","Latticework"]},
+{n:60,c:"Mô hình quyết định",vi:"Nguyên tắc tối thiểu hóa tối đa",en:"Maximin / Minimax Regret",hook:"Chọn phương án có kết quả tệ nhất tốt nhất — chiến lược an toàn khi không đủ thông tin",tags:["Game Theory","Risk"]},
+{n:61,c:"Mô hình quyết định",vi:"Nhật ký quyết định",en:"Decision Journal",hook:"Ghi lại lý do, kỳ vọng, và cảm xúc lúc quyết định — nhìn lại để tách biệt quyết định tốt khỏi kết quả may mắn",tags:["Learning","Metacognition"]},
+{n:62,c:"Mô hình quyết định",vi:"Kiểm tra tình huống đảo ngược",en:"Inversion Test",hook:"Hỏi ngược: 'Làm thế nào để chắc chắn thất bại?' — rồi tránh những điều đó",tags:["Munger","Inversion"]},
+{n:63,c:"Mô hình quyết định",vi:"Chờ đợi có chủ ý",en:"Deliberate Waiting",hook:"Không phải mọi quyết định đều cần ra ngay — đôi khi chờ để có thêm thông tin là chiến lược tối ưu",tags:["Patience","Information"]},
+
+// ── Lý thuyết trò chơi (64–73) ──
+{n:64,c:"Lý thuyết trò chơi",vi:"Cân bằng Nash",en:"Nash Equilibrium",hook:"Không ai có thể đơn phương cải thiện kết quả của mình — trạng thái ổn định trong tương tác chiến lược",tags:["Nash","Strategy"]},
+{n:65,c:"Lý thuyết trò chơi",vi:"Thế lưỡng nan tù nhân",en:"Prisoner's Dilemma",hook:"Tự lợi dẫn đến kết quả tệ cho tất cả — gốc rễ của bài toán hợp tác xã hội",tags:["Cooperation","Game Theory"]},
+{n:66,c:"Lý thuyết trò chơi",vi:"Trò chơi tổng dương vs Tổng bằng không",en:"Positive-Sum vs Zero-Sum",hook:"Không phải mọi tình huống đều là cuộc chiến — nhận diện khi nào hợp tác tạo giá trị lớn hơn cạnh tranh",tags:["Cooperation","Win-Win"]},
+{n:67,c:"Lý thuyết trò chơi",vi:"Chiến lược trội",en:"Dominant Strategy",hook:"Chiến lược tốt nhất bất kể đối phương làm gì — nếu có, chọn ngay không cần suy nghĩ",tags:["Strategy","Game Theory"]},
+{n:68,c:"Lý thuyết trò chơi",vi:"Cam kết & Ràng buộc chiến lược",en:"Commitment & Credible Threats",hook:"Cam kết trước có thể thay đổi trò chơi — đốt cầu để đối phương tin bạn sẽ không lùi",tags:["Schelling","Commitment"]},
+{n:69,c:"Lý thuyết trò chơi",vi:"Chiến lược lặp đi lặp lại",en:"Repeated Games & Reputation",hook:"Trò chơi lặp nhiều vòng → hợp tác nảy sinh tự nhiên vì danh tiếng có giá trị lâu dài",tags:["Reputation","Axelrod"]},
+{n:70,c:"Lý thuyết trò chơi",vi:"Đấu giá & Lý thuyết cơ chế",en:"Auction Theory & Mechanism Design",hook:"Thiết kế luật chơi để khuyến khích hành vi mong muốn — ai thiết kế trò chơi, người đó có lợi thế",tags:["Mechanism","Incentives"]},
+{n:71,c:"Lý thuyết trò chơi",vi:"Thông tin & Tín hiệu",en:"Signaling Theory",hook:"Hành động mà đối phương không thể giả mạo dễ dàng truyền tải thông tin đáng tin cậy",tags:["Spence","Information"]},
+{n:72,c:"Lý thuyết trò chơi",vi:"Vấn đề ủy thác — đại diện",en:"Principal-Agent Problem",hook:"Đại diện có thể hành động vì lợi ích của mình, không phải bạn — thiết kế ưu đãi để hai bên cùng hướng",tags:["Incentives","Agency"]},
+{n:73,c:"Lý thuyết trò chơi",vi:"Lý thuyết đàm phán BATNA",en:"BATNA (Best Alternative To Negotiated Agreement)",hook:"Quyền lực đàm phán đến từ chất lượng phương án thay thế — cải thiện BATNA trước khi ngồi vào bàn",tags:["Negotiation","Fisher"]},
+
+// ── Tư duy chiến lược (74–83) ──
+{n:74,c:"Tư duy chiến lược",vi:"Chi phí cơ hội",en:"Opportunity Cost",hook:"Mỗi lựa chọn là từ chối tất cả lựa chọn thay thế — cái thực sự quan trọng là những gì bạn không làm",tags:["Economics","Trade-off"]},
+{n:75,c:"Tư duy chiến lược",vi:"Tư duy từ nguyên tắc đầu tiên",en:"First Principles Thinking",hook:"Phá vỡ mọi giả định, xây dựng lại từ sự thật cơ bản — Aristotle, Elon Musk",tags:["Reasoning","Innovation"]},
+{n:76,c:"Tư duy chiến lược",vi:"Tư duy bậc hai & Bậc ba",en:"Second & Third-Order Thinking",hook:"Cân nhắc hậu quả của hậu quả — người khác nghĩ đến bậc một, lợi thế đến từ bậc hai",tags:["Systems","Howard Marks"]},
+{n:77,c:"Tư duy chiến lược",vi:"Lợi thế thông tin",en:"Information Advantage",hook:"Ai biết điều người khác không biết, hoặc biết trước, sẽ quyết định tốt hơn",tags:["Information","Edge"]},
+{n:78,c:"Tư duy chiến lược",vi:"Tư duy ngược (Inversion)",en:"Inversion",hook:"Thay vì hỏi 'làm thế nào thành công', hỏi 'làm thế nào chắc chắn thất bại' rồi tránh đi",tags:["Munger","Problem Solving"]},
+{n:79,c:"Tư duy chiến lược",vi:"Điểm đòn bẩy",en:"Leverage Points",hook:"Không phải mọi hành động đều có tác động như nhau — tìm điểm can thiệp tạo ra thay đổi lớn nhất",tags:["Systems","Meadows"]},
+{n:80,c:"Tư duy chiến lược",vi:"Phân tích 80/20",en:"Pareto Principle",hook:"80% kết quả đến từ 20% nguyên nhân — tập trung vào thiểu số có đòn bẩy cao nhất",tags:["Pareto","Focus"]},
+{n:81,c:"Tư duy chiến lược",vi:"Thiết kế ngược từ kết quả",en:"Working Backward",hook:"Bắt đầu từ kết quả mong muốn, thiết kế ngược lại các bước cần thiết — Amazon PR/FAQ",tags:["Amazon","Planning"]},
+{n:82,c:"Tư duy chiến lược",vi:"Lý thuyết trò chơi lặp & Danh tiếng",en:"Long-game Thinking",hook:"Quyết định ngắn hạn có vẻ tốt hơn nhưng phá hủy giá trị dài hạn — đặc biệt về danh tiếng",tags:["Long-term","Reputation"]},
+{n:83,c:"Tư duy chiến lược",vi:"Thặng dư & Chi phí chuyển đổi",en:"Moats & Switching Costs",hook:"Quyết định tốt xây dựng lợi thế khó sao chép — thương hiệu, mạng lưới, thói quen",tags:["Competitive","Moats"]},
+
+// ── Quyết định dưới bất định (84–92) ──
+{n:84,c:"Quyết định dưới bất định",vi:"Thiên nga đen",en:"Black Swan Events",hook:"Biến cố hiếm, tác động khổng lồ, giải thích hồi tố dễ — Taleb: tối ưu cho kháng cự, không phải dự đoán",tags:["Taleb","Uncertainty"]},
+{n:85,c:"Quyết định dưới bất định",vi:"Chống giòn (Antifragility)",en:"Antifragility",hook:"Không chỉ chịu được sốc mà còn mạnh lên nhờ sốc — thiết kế quyết định được hưởng lợi từ biến động",tags:["Taleb","Resilience"]},
+{n:86,c:"Quyết định dưới bất định",vi:"Đa dạng hóa & Không bỏ trứng một rổ",en:"Diversification",hook:"Phân tán rủi ro qua các tài sản, lĩnh vực, hoặc chiến lược không tương quan nhau",tags:["Risk","Portfolio"]},
+{n:87,c:"Quyết định dưới bất định",vi:"Chiến lược barbell",en:"Barbell Strategy",hook:"Kết hợp cực kỳ an toàn + cực kỳ rủi ro, tránh trung bình — Taleb: 90% trái phiếu + 10% options",tags:["Taleb","Risk"]},
+{n:88,c:"Quyết định dưới bất định",vi:"Vùng bất định đã biết & Chưa biết",en:"Known Unknowns & Unknown Unknowns",hook:"Rumsfeld: biết mình không biết là quản lý được; không biết mình không biết mới nguy hiểm",tags:["Rumsfeld","Risk"]},
+{n:89,c:"Quyết định dưới bất định",vi:"Thực nghiệm nhanh & Học từ thực tế",en:"Rapid Experimentation",hook:"Khi không chắc, thiết kế thí nghiệm nhỏ rẻ để thu thập thông tin thực tế thay vì phân tích mãi",tags:["Lean","MVP"]},
+{n:90,c:"Quyết định dưới bất định",vi:"Dự phòng & Biên an toàn",en:"Margin of Safety",hook:"Luôn để biên an toàn — Graham: mua cổ phiếu 50 đồng khi trị giá 100 đồng",tags:["Graham","Buffett"]},
+{n:91,c:"Quyết định dưới bất định",vi:"Phân tích độ nhạy",en:"Sensitivity Analysis",hook:"Thay đổi từng giả định để biết biến nào ảnh hưởng nhất đến kết quả — tập trung vào biến nhạy nhất",tags:["Modeling","Risk"]},
+{n:92,c:"Quyết định dưới bất định",vi:"Kế hoạch dự phòng (Contingency)",en:"Contingency Planning",hook:"Nếu X xảy ra thì làm Y — lên kế hoạch trước khi cần, không phải trong lúc khủng hoảng",tags:["Planning","Resilience"]},
+
+// ── Học hỏi từ quyết định (93–100) ──
+{n:93,c:"Học hỏi từ quyết định",vi:"Tách biệt chất lượng quyết định & Kết quả",en:"Decision Quality vs Outcome Quality",hook:"Quyết định tốt đôi khi cho kết quả xấu vì may rủi — đánh giá quá trình, không chỉ kết quả",tags:["Process","Poker"]},
+{n:94,c:"Học hỏi từ quyết định",vi:"Vòng lặp phản hồi & Cải tiến",en:"Feedback Loops in Decision Making",hook:"Không có phản hồi → không có học hỏi → không có cải tiến — thiết kế vòng phản hồi có chủ ý",tags:["Feedback","Learning"]},
+{n:95,c:"Học hỏi từ quyết định",vi:"Học kép (Double-Loop Learning)",en:"Double-Loop Learning",hook:"Single-loop sửa lỗi; double-loop đặt câu hỏi về giả định nền tảng tạo ra lỗi — Argyris",tags:["Argyris","Systems"]},
+{n:96,c:"Học hỏi từ quyết định",vi:"Phân tích hậu kiểm (AAR)",en:"After-Action Review",hook:"Điều gì đáng xảy ra? Điều gì thực sự xảy ra? Tại sao khác nhau? Cải thiện gì?",tags:["Military","Reflection"]},
+{n:97,c:"Học hỏi từ quyết định",vi:"Chuẩn bị môi trường ra quyết định",en:"Decision Environment Design",hook:"Thiết kế môi trường giảm thiểu thiên kiến — thay đổi mặc định (default) có sức mạnh hơn ý chí",tags:["Nudge","Thaler"]},
+{n:98,c:"Học hỏi từ quyết định",vi:"Cộng đồng phản biện & Tư duy đỏ",en:"Red Team Thinking",hook:"Thuê người chuyên đi tìm lỗ hổng trong kế hoạch — thách thức giả định chủ động",tags:["Devil's Advocate","Military"]},
+{n:99,c:"Học hỏi từ quyết định",vi:"Hiệu chỉnh dự báo (Superforecasting)",en:"Superforecasting",hook:"Người dự báo tốt nhất: khiêm tốn nhận thức, cập nhật liên tục, tư duy xác suất — Tetlock",tags:["Tetlock","Calibration"]},
+{n:100,c:"Học hỏi từ quyết định",vi:"Latticework Ra Quyết Định",en:"Decision Making Latticework",hook:"Kết hợp tất cả mô hình thành mạng lưới — sức mạnh tổng hợp vượt tổng các phần riêng lẻ",tags:["Munger","Synthesis"]},
+];
+
+const catKeys=Object.keys(CATS);
+let activeCat="Tất cả",curN=null,view="grid";
+let viewed=new Set(),cache={};
+
+function renderTabs(){
+  const el=document.getElementById("tabs");
+  const all=["Tất cả",...catKeys];
+  el.innerHTML=all.map(c=>`<div class="tab${c===activeCat?" active":""}" onclick="setCat(${JSON.stringify(c)})">${c}</div>`).join("");
+}
+function setCat(c){activeCat=c;renderTabs();filter();}
+function setView(v,btn){
+  view=v;
+  document.querySelectorAll(".view-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("grid").className=v==="list"?"grid list-view":"grid";
+  filter();
+}
+
+function filter(){
+  const q=document.getElementById("search").value.toLowerCase();
+  const g=document.getElementById("grid"),nr=document.getElementById("nr");
+  let f=DATA.filter(m=>{
+    if(activeCat!=="Tất cả"&&m.c!==activeCat)return false;
+    if(q&&![m.vi,m.en,m.hook,...m.tags].join(" ").toLowerCase().includes(q))return false;
+    return true;
+  });
+  document.getElementById("s-show").textContent=f.length;
+  document.getElementById("s-view").textContent=viewed.size;
+  const pct=Math.round(viewed.size/DATA.length*100);
+  document.getElementById("s-pct").textContent=pct+"%";
+  document.getElementById("prog").style.width=pct+"%";
+  if(!f.length){g.innerHTML="";nr.style.display="block";return;}
+  nr.style.display="none";
+
+  const cat=m=>CATS[m.c];
+  if(view==="list"){
+    g.innerHTML=f.map(m=>`<div class="card${viewed.has(m.n)?" viewed":""}" onclick="open(${m.n})">
+      <div class="card-left">
+        <div class="card-num">#${String(m.n).padStart(2,"0")}</div>
+        <div class="cat-badge" style="background:${cat(m).bg};color:${cat(m).tc};border-color:${cat(m).bc}">${m.c}</div>
+      </div>
+      <div>
+        <div class="card-title">${m.vi}</div>
+        <div class="card-en">${m.en}</div>
+        <div class="card-hook">${m.hook}</div>
+        <div class="card-tags">${m.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+      </div>
+      ${viewed.has(m.n)?'<div class="viewed-mark">✓</div>':''}
+    </div>`).join("");
+  } else {
+    g.innerHTML=f.map(m=>`<div class="card${viewed.has(m.n)?" viewed":""}" onclick="open(${m.n})">
+      ${viewed.has(m.n)?'<div class="viewed-mark">✓</div>':''}
+      <div class="card-num">#${String(m.n).padStart(2,"0")}</div>
+      <div class="cat-badge" style="background:${cat(m).bg};color:${cat(m).tc};border-color:${cat(m).bc}">${m.c}</div>
+      <div class="card-title">${m.vi}</div>
+      <div class="card-en">${m.en}</div>
+      <div class="card-hook">${m.hook}</div>
+      <div class="card-tags">${m.tags.map(t=>`<span class="tag">${t}</span>`).join("")}</div>
+    </div>`).join("");
+  }
+}
+
+function open(n){
+  curN=n;
+  const m=DATA.find(x=>x.n===n),cat=CATS[m.c];
+  document.getElementById("m-num").textContent="#"+String(m.n).padStart(2,"0");
+  document.getElementById("m-cat").textContent=m.c;
+  document.getElementById("m-cat").style.cssText=`background:${cat.bg};color:${cat.tc};border:1px solid ${cat.bc}`;
+  document.getElementById("m-title").textContent=m.vi;
+  document.getElementById("m-en").textContent=m.en;
+  document.getElementById("m-body").innerHTML=`<div class="loading-area"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div><div class="loading-txt">AI đang tổng hợp nội dung...</div></div>`;
+  document.getElementById("btn-copy").style.display="none";
+  document.getElementById("mbg").className="modal-bg open";
+  document.body.style.overflow="hidden";
+  viewed.add(n);filter();
+  if(cache[n]){document.getElementById("m-body").innerHTML=cache[n];document.getElementById("btn-copy").style.display="block";return;}
+  fetchContent(n);
+}
+
+async function fetchContent(n){
+  const m=DATA.find(x=>x.n===n);
+  const prompt=`Bạn là chuyên gia Decision Making, Behavioral Economics và Mental Models. Giải thích khái niệm "${m.vi}" (${m.en}) trong lĩnh vực Decision Making cho người Việt muốn làm chủ tư duy ra quyết định.
+
+Trả lời ĐÚNG FORMAT HTML sau, không thêm bất cứ thứ gì ngoài format này:
+<p><strong>Bản chất:</strong> [1-2 câu định nghĩa cốt lõi, chính xác và súc tích]</p>
+<h3>⚖️ Vai trò trong Decision Making</h3>
+<p>[2-3 câu: tại sao khái niệm này thiết yếu, nó ảnh hưởng đến chất lượng quyết định thế nào]</p>
+<h3>💡 Ví dụ thực tế</h3>
+<div class="example-box"><div class="ex-label">📍 Ví dụ minh họa</div><p>[Ví dụ cụ thể, sinh động — ưu tiên kinh doanh, đầu tư, hoặc cuộc sống quen thuộc với người Việt. 3-4 câu đủ chi tiết để dễ hình dung]</p></div>
+<h3>🔗 Kết nối Mental Models</h3>
+<div class="model-box"><div class="ml-label">🕸️ Latticework</div><p>[Khái niệm này liên hệ với mental model nào trong latticework? Kết hợp chúng tạo ra tư duy mạnh hơn thế nào? 2-3 câu]</p></div>
+<h3>⚡ Áp dụng ngay</h3>
+<p>[2-3 câu hành động cụ thể: làm gì ngay để áp dụng khái niệm này vào quyết định thực tế]</p>
+<h3>⚠️ Bẫy thường gặp</h3>
+<div class="trap-box"><p>[Sai lầm phổ biến nhất khi hiểu sai hoặc bỏ qua khái niệm này — 1-2 câu thực tế]</p></div>`;
+
+  try{
+    const r=await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-6",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+    const d=await r.json();
+    const html=d.content[0].text;
+    cache[n]=html;
+    if(curN===n){document.getElementById("m-body").innerHTML=html;document.getElementById("btn-copy").style.display="block";}
+  }catch(e){
+    if(curN===n)document.getElementById("m-body").innerHTML='<p style="color:#EF4444;text-align:center;padding:2rem">Không thể tải. Thử lại.</p>';
+  }
+}
+
+function nav(d){
+  if(curN===null)return;
+  const idx=DATA.findIndex(x=>x.n===curN),nx=DATA[idx+d];
+  if(nx)open(nx.n);
+}
+function closeM(e){
+  if(!e||e.target===document.getElementById("mbg")){
+    document.getElementById("mbg").className="modal-bg";
+    document.body.style.overflow="";
+  }
+}
+function copyQ(){
+  if(!curN)return;
+  const m=DATA.find(x=>x.n===curN);
+  const q=`Hãy đi sâu hơn vào khái niệm "${m.vi}" (${m.en}) trong Decision Making: thêm ví dụ lịch sử điển hình, cách kết hợp với các mental models khác để ra quyết định tốt hơn, và những trường hợp thực tế mà việc không hiểu khái niệm này đã dẫn đến quyết định sai nghiêm trọng.`;
+  navigator.clipboard.writeText(q).then(()=>alert('✅ Đã copy!\n\nDán vào chat để hỏi sâu hơn về: "'+m.vi+'"')).catch(()=>{
+    const t=document.createElement("textarea");t.value=q;document.body.appendChild(t);t.select();document.execCommand("copy");document.body.removeChild(t);
+    alert('✅ Đã copy câu hỏi về: "'+m.vi+'"');
+  });
+}
+
+document.addEventListener("keydown",e=>{
+  if(e.key==="Escape")closeM();
+  if(document.getElementById("mbg").className.includes("open")){
+    if(e.key==="ArrowLeft")nav(-1);
+    if(e.key==="ArrowRight")nav(1);
+  }
+});
+
+renderTabs();filter();
+</script>
+</body>
+</html>
